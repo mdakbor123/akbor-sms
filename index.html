@@ -5,91 +5,406 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AKBOR SMS</title>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f1f5f9;color:#172033;font-family:Arial,sans-serif}
-header{background:#102b50;color:white;padding:20px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:24px;font-weight:bold}.logo span{color:#45d6c5}
-button{padding:11px 15px;border:0;border-radius:8px;cursor:pointer}
+header{background:#102b50;color:white;padding:17px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:24px;font-weight:bold}
+.logo span{color:#45d6c5}
+button{padding:11px 15px;border:0;border-radius:8px;cursor:pointer;background:#102b50;color:white}
+button:disabled{opacity:.5;cursor:not-allowed}
 .container{max-width:1000px;margin:auto;padding:18px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .card,.panel{background:white;padding:18px;border-radius:12px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .number{font-size:27px;font-weight:bold;margin-top:10px}
 .tabs{display:flex;gap:7px;flex-wrap:wrap;margin:20px 0}
-.tab{background:#e2e8f0}.active{background:#102b50;color:white}
+.tab{background:#e2e8f0;color:#172033}
+.tab.active{background:#102b50;color:white}
 .muted{color:#64748b;font-size:14px}
-.notice{background:#fff4d6;padding:14px;border-radius:9px}
+.notice{background:#fff4d6;padding:14px;border-radius:9px;margin:15px 0}
+input{width:100%;padding:13px;margin:7px 0 14px;border:1px solid #cbd5e1;border-radius:8px;font-size:16px}
+label{font-weight:bold;font-size:14px}
+.login{max-width:430px;margin:35px auto}
+.error{color:#b91c1c;font-size:14px}
+.success{color:#15803d;font-size:14px}
+.customer{padding:12px;border-bottom:1px solid #e2e8f0}
 footer{text-align:center;padding:20px;color:#64748b}
-[hidden]{display:none}
+[hidden]{display:none!important}
 @media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
+
 <body>
+
 <header>
- <div class="logo">AKBOR <span>SMS</span></div>
- <button onclick="changeLang()" id="lang">English</button>
+  <div class="logo">AKBOR <span>SMS</span></div>
+  <div>
+    <button onclick="changeLang()" id="lang">English</button>
+    <button id="logoutBtn" onclick="logout()" hidden>Logout</button>
+  </div>
 </header>
+
 <main class="container">
- <h2 data-bn="SMS পরিচালনা ড্যাশবোর্ড" data-en="SMS Management Dashboard">SMS পরিচালনা ড্যাশবোর্ড</h2>
- <p class="muted" data-bn="আপনার বৈধ ব্যবসায়িক SMS পরিচালনা করুন।" data-en="Manage your business SMS notifications.">আপনার বৈধ ব্যবসায়িক SMS পরিচালনা করুন।</p>
 
- <div class="grid">
-  <div class="card"><div data-bn="মোট গ্রাহক" data-en="Total Customers">মোট গ্রাহক</div><div class="number">0</div></div>
-  <div class="card"><div data-bn="পাঠানো মেসেজ" data-en="Messages Sent">পাঠানো মেসেজ</div><div class="number">0</div></div>
-  <div class="card"><div data-bn="ব্যালেন্স" data-en="Balance">ব্যালেন্স</div><div class="number">0 SAR</div></div>
-  <div class="card"><div data-bn="মাসিক খরচ" data-en="Monthly Expenses">মাসিক খরচ</div><div class="number">0 SAR</div></div>
- </div>
+  <!-- ADMIN LOGIN -->
+  <section class="panel login" id="loginBox">
+    <h2>AKBOR SMS Admin Login</h2>
+    <p class="muted">শুধু অনুমোদিত Admin প্রবেশ করতে পারবেন।</p>
 
- <div class="tabs">
-  <button class="tab active" onclick="show('home',this)" data-bn="হোম" data-en="Home">হোম</button>
-  <button class="tab" onclick="show('customers',this)" data-bn="গ্রাহক" data-en="Customers">গ্রাহক</button>
-  <button class="tab" onclick="show('messages',this)" data-bn="মেসেজ" data-en="Messages">মেসেজ</button>
-  <button class="tab" onclick="show('reports',this)" data-bn="রিপোর্ট" data-en="Reports">রিপোর্ট</button>
- </div>
+    <form id="loginForm">
+      <label>Email Address</label>
+      <input type="email" id="email" placeholder="Admin email" required>
 
- <section class="panel" id="home">
-  <h3 data-bn="AKBOR SMS-এ স্বাগতম" data-en="Welcome to AKBOR SMS">AKBOR SMS-এ স্বাগতম</h3>
-  <p data-bn="আপনার SMS ব্যবসা পরিচালনার প্ল্যাটফর্ম।" data-en="Your business SMS management platform.">আপনার SMS ব্যবসা পরিচালনার প্ল্যাটফর্ম।</p>
- </section>
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Admin password" required>
 
- <section class="panel" id="customers" hidden>
-  <h3 data-bn="গ্রাহক পরিচালনা" data-en="Customer Management">গ্রাহক পরিচালনা</h3>
-  <p>ডেটাবেস যুক্ত হলে গ্রাহকের তথ্য এখানে দেখা যাবে।</p>
- </section>
+      <button type="submit" id="loginBtn">Login</button>
+    </form>
 
- <section class="panel" id="messages" hidden>
-  <h3 data-bn="SMS নোটিফিকেশন" data-en="SMS Notifications">SMS নোটিফিকেশন</h3>
-  <p>নিরাপদ সার্ভার ও অনুমোদিত SMS প্রদানকারী যুক্ত করার পর এই সুবিধা চালু হবে।</p>
-  <button disabled>SMS পাঠানো এখনো চালু হয়নি</button>
- </section>
+    <p id="loginMessage" class="error"></p>
+    <button type="button" onclick="resetPassword()">Forgot Password?</button>
+  </section>
 
- <section class="panel" id="reports" hidden>
-  <h3 data-bn="ব্যবসার রিপোর্ট" data-en="Business Reports">ব্যবসার রিপোর্ট</h3>
-  <p>SMS ইতিহাস, খরচ ও গ্রাহকের রিপোর্ট এখানে থাকবে।</p>
- </section>
+  <!-- ADMIN DASHBOARD -->
+  <section id="dashboard" hidden>
 
- <div class="notice">
-  <b>নোট:</b> এটি প্রথম ওয়েবসাইট সংস্করণ। বাস্তব SMS, গ্রাহকের তথ্য ও লগইনের জন্য পরবর্তী ধাপে নিরাপদ সার্ভার ও ডেটাবেস লাগবে।
- </div>
+    <h2 data-bn="SMS পরিচালনা ড্যাশবোর্ড"
+        data-en="SMS Management Dashboard">
+      SMS পরিচালনা ড্যাশবোর্ড
+    </h2>
+
+    <p class="muted" id="adminEmail"></p>
+
+    <div class="grid">
+      <div class="card">
+        <div>মোট গ্রাহক</div>
+        <div class="number" id="totalCustomers">0</div>
+      </div>
+
+      <div class="card">
+        <div>পাঠানো মেসেজ</div>
+        <div class="number" id="messagesSent">0</div>
+      </div>
+
+      <div class="card">
+        <div>ব্যালেন্স</div>
+        <div class="number">0 SAR</div>
+      </div>
+
+      <div class="card">
+        <div>মাসিক খরচ</div>
+        <div class="number">0 SAR</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="show('home',this)">হোম</button>
+      <button class="tab" onclick="show('customers',this)">গ্রাহক</button>
+      <button class="tab" onclick="show('messages',this)">মেসেজ</button>
+      <button class="tab" onclick="show('reports',this)">রিপোর্ট</button>
+    </div>
+
+    <section class="panel" id="home">
+      <h3>AKBOR SMS-এ স্বাগতম</h3>
+      <p>আপনার Admin Dashboard চালু হয়েছে।</p>
+      <p class="success" id="connectionStatus">Firebase সংযোগ হচ্ছে...</p>
+    </section>
+
+    <section class="panel" id="customers" hidden>
+      <h3>গ্রাহক পরিচালনা</h3>
+
+      <form id="customerForm">
+        <label>গ্রাহকের নাম</label>
+        <input id="customerName" placeholder="Customer name" required>
+
+        <label>মোবাইল নম্বর</label>
+        <input id="customerPhone" type="tel"
+               placeholder="Customer phone number">
+
+        <button type="submit">গ্রাহক যোগ করুন</button>
+      </form>
+
+      <p id="customerMessage"></p>
+      <h3>গ্রাহকের তালিকা</h3>
+      <div id="customerList">লোড হচ্ছে...</div>
+    </section>
+
+    <section class="panel" id="messages" hidden>
+      <h3>SMS Notifications</h3>
+      <p>এখানে বৈধ ব্যবসায়িক নোটিফিকেশন পরিচালনার ব্যবস্থা থাকবে।</p>
+      <div class="notice">
+        SMS পাঠানো এখনো চালু হয়নি। অনুমোদিত SMS Provider এবং নিরাপদ
+        সার্ভার সংযুক্ত করার পর এই সুবিধা চালু করা যাবে।
+      </div>
+    </section>
+
+    <section class="panel" id="reports" hidden>
+      <h3>ব্যবসার রিপোর্ট</h3>
+      <p>মোট গ্রাহক: <b id="reportCustomers">0</b></p>
+      <p>পাঠানো SMS: <b id="reportMessages">0</b></p>
+      <p>বর্তমান ব্যালেন্স: 0 SAR</p>
+      <p>মাসিক খরচ: 0 SAR</p>
+    </section>
+
+    <div class="notice">
+      নিরাপত্তা: Admin অ্যাকাউন্টের পাসওয়ার্ড কাউকে দেবেন না।
+    </div>
+
+  </section>
 </main>
+
 <footer>© 2026 AKBOR SMS</footer>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
 <script>
-let language="bn";
-function changeLang(){
- language=language==="bn"?"en":"bn";
- document.documentElement.lang=language;
- document.querySelectorAll("[data-bn]").forEach(el=>{
-  el.textContent=el.getAttribute("data-"+language);
- });
- document.getElementById("lang").textContent=language==="bn"?"English":"বাংলা";
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBPUKwRfB_eZ-sJoznP3O4w0fzf0xINhB8",
+  authDomain: "akbor-sms.firebaseapp.com",
+  databaseURL: "https://akbor-sms-default-rtdb.firebaseio.com",
+  projectId: "akbor-sms",
+  storageBucket: "akbor-sms.firebasestorage.app",
+  messagingSenderId: "640138376906",
+  appId: "1:640138376906:web:c0673cd3127c691fada633",
+  measurementId: "G-D946TCM0F9"
+};
+
+// Only this UID is allowed as Admin in this page.
+// Database Rules must enforce the same restriction.
+const ADMIN_UID = "yrV5gMYywlUePe88k8iiTCKweHj2";
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.database();
+
+let currentUser = null;
+let language = "bn";
+let customerData = {};
+
+// Login
+document.getElementById("loginForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const message = document.getElementById("loginMessage");
+  const btn = document.getElementById("loginBtn");
+
+  message.textContent = "";
+  btn.disabled = true;
+  btn.textContent = "Logging in...";
+
+  try {
+    const result = await auth.signInWithEmailAndPassword(email, password);
+
+    if (result.user.uid !== ADMIN_UID) {
+      await auth.signOut();
+      throw new Error("এই অ্যাকাউন্টের Admin অনুমতি নেই।");
+    }
+  } catch(error) {
+    message.textContent = friendlyError(error);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Login";
+  }
+});
+
+// Check login state
+auth.onAuthStateChanged(async function(user){
+  if (user && user.uid === ADMIN_UID) {
+    currentUser = user;
+
+    document.getElementById("loginBox").hidden = true;
+    document.getElementById("dashboard").hidden = false;
+    document.getElementById("logoutBtn").hidden = false;
+    document.getElementById("adminEmail").textContent = "Admin: " + user.email;
+
+    document.getElementById("connectionStatus").textContent =
+      "Firebase সংযোগ সফল হয়েছে।";
+
+    loadCustomers();
+  } else {
+    currentUser = null;
+
+    if (user) {
+      await auth.signOut();
+    }
+
+    document.getElementById("loginBox").hidden = false;
+    document.getElementById("dashboard").hidden = true;
+    document.getElementById("logoutBtn").hidden = true;
+  }
+});
+
+// Logout
+async function logout(){
+  await auth.signOut();
 }
+
+// Password reset
+async function resetPassword(){
+  const email = document.getElementById("email").value.trim();
+
+  if (!email) {
+    document.getElementById("loginMessage").textContent =
+      "আগে Email লিখুন।";
+    return;
+  }
+
+  try {
+    await auth.sendPasswordResetEmail(email);
+    document.getElementById("loginMessage").textContent =
+      "Password reset email পাঠানো হয়েছে।";
+  } catch(error) {
+    document.getElementById("loginMessage").textContent =
+      friendlyError(error);
+  }
+}
+
+// Error messages
+function friendlyError(error){
+  const code = error.code || "";
+
+  if (code === "auth/invalid-credential" ||
+      code === "auth/wrong-password" ||
+      code === "auth/user-not-found") {
+    return "Email অথবা Password সঠিক নয়।";
+  }
+
+  if (code === "auth/too-many-requests") {
+    return "অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পরে চেষ্টা করুন।";
+  }
+
+  return error.message || "সমস্যা হয়েছে। আবার চেষ্টা করুন।";
+}
+
+// Add customer
+document.getElementById("customerForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  if (!currentUser || currentUser.uid !== ADMIN_UID) return;
+
+  const name = document.getElementById("customerName").value.trim();
+  const phone = document.getElementById("customerPhone").value.trim();
+  const message = document.getElementById("customerMessage");
+
+  if (!name) return;
+
+  try {
+    await db.ref("customers").push({
+      name: name,
+      phone: phone,
+      createdAt: firebase.database.ServerValue.TIMESTAMP
+    });
+
+    document.getElementById("customerForm").reset();
+    message.className = "success";
+    message.textContent = "গ্রাহক সফলভাবে যোগ হয়েছে।";
+  } catch(error) {
+    message.className = "error";
+    message.textContent = "সংরক্ষণ করা যায়নি: " + error.message;
+  }
+});
+
+// Load customers
+function loadCustomers(){
+  db.ref("customers").on("value", function(snapshot){
+    if (!currentUser || currentUser.uid !== ADMIN_UID) return;
+
+    customerData = snapshot.val() || {};
+
+    const entries = Object.entries(customerData);
+    const list = document.getElementById("customerList");
+
+    list.textContent = "";
+
+    if (entries.length === 0) {
+      list.textContent = "এখনো কোনো গ্রাহক যোগ করা হয়নি।";
+    } else {
+      entries.forEach(function(entry){
+        const id = entry[0];
+        const customer = entry[1] || {};
+
+        const item = document.createElement("div");
+        item.className = "customer";
+
+        const title = document.createElement("b");
+        title.textContent = customer.name || "নাম নেই";
+
+        const phone = document.createElement("div");
+        phone.className = "muted";
+        phone.textContent = customer.phone || "নম্বর দেওয়া হয়নি";
+
+        const remove = document.createElement("button");
+        remove.textContent = "মুছুন";
+        remove.style.marginTop = "8px";
+        remove.onclick = function(){
+          deleteCustomer(id);
+        };
+
+        item.appendChild(title);
+        item.appendChild(phone);
+        item.appendChild(remove);
+        list.appendChild(item);
+      });
+    }
+
+    document.getElementById("totalCustomers").textContent = entries.length;
+    document.getElementById("reportCustomers").textContent = entries.length;
+  }, function(error){
+    document.getElementById("connectionStatus").textContent =
+      "Database সমস্যা: " + error.message;
+  });
+}
+
+// Delete customer
+async function deleteCustomer(id){
+  if (!currentUser || currentUser.uid !== ADMIN_UID) return;
+
+  if (!confirm("এই গ্রাহক মুছে ফেলবেন?")) return;
+
+  try {
+    await db.ref("customers/" + id).remove();
+  } catch(error) {
+    alert("মুছতে সমস্যা হয়েছে: " + error.message);
+  }
+}
+
+// Tabs
 function show(id,btn){
- document.querySelectorAll("main section").forEach(el=>el.hidden=true);
- document.getElementById(id).hidden=false;
- document.querySelectorAll(".tab").forEach(el=>el.classList.remove("active"));
- btn.classList.add("active");
+  document.querySelectorAll("#dashboard section.panel").forEach(function(el){
+    el.hidden = true;
+  });
+
+  document.getElementById(id).hidden = false;
+
+  document.querySelectorAll(".tab").forEach(function(el){
+    el.classList.remove("active");
+  });
+
+  btn.classList.add("active");
+}
+
+// Language
+function changeLang(){
+  language = language === "bn" ? "en" : "bn";
+
+  document.documentElement.lang = language;
+
+  document.querySelectorAll("[data-bn]").forEach(function(el){
+    el.textContent = el.getAttribute("data-" + language);
+  });
+
+  document.getElementById("lang").textContent =
+    language === "bn" ? "English" : "বাংলা";
 }
 </script>
+
 </body>
 </html>
-
