@@ -1,1 +1,95 @@
-# akbor-sms
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AKBOR SMS</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f1f5f9;color:#172033;font-family:Arial,sans-serif}
+header{background:#102b50;color:white;padding:20px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:24px;font-weight:bold}.logo span{color:#45d6c5}
+button{padding:11px 15px;border:0;border-radius:8px;cursor:pointer}
+.container{max-width:1000px;margin:auto;padding:18px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card,.panel{background:white;padding:18px;border-radius:12px;margin-bottom:14px}
+.number{font-size:27px;font-weight:bold;margin-top:10px}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:20px 0}
+.tab{background:#e2e8f0}.active{background:#102b50;color:white}
+.muted{color:#64748b;font-size:14px}
+.notice{background:#fff4d6;padding:14px;border-radius:9px}
+footer{text-align:center;padding:20px;color:#64748b}
+[hidden]{display:none}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">AKBOR <span>SMS</span></div>
+ <button onclick="changeLang()" id="lang">English</button>
+</header>
+<main class="container">
+ <h2 data-bn="SMS পরিচালনা ড্যাশবোর্ড" data-en="SMS Management Dashboard">SMS পরিচালনা ড্যাশবোর্ড</h2>
+ <p class="muted" data-bn="আপনার বৈধ ব্যবসায়িক SMS পরিচালনা করুন।" data-en="Manage your business SMS notifications.">আপনার বৈধ ব্যবসায়িক SMS পরিচালনা করুন।</p>
+
+ <div class="grid">
+  <div class="card"><div data-bn="মোট গ্রাহক" data-en="Total Customers">মোট গ্রাহক</div><div class="number">0</div></div>
+  <div class="card"><div data-bn="পাঠানো মেসেজ" data-en="Messages Sent">পাঠানো মেসেজ</div><div class="number">0</div></div>
+  <div class="card"><div data-bn="ব্যালেন্স" data-en="Balance">ব্যালেন্স</div><div class="number">0 SAR</div></div>
+  <div class="card"><div data-bn="মাসিক খরচ" data-en="Monthly Expenses">মাসিক খরচ</div><div class="number">0 SAR</div></div>
+ </div>
+
+ <div class="tabs">
+  <button class="tab active" onclick="show('home',this)" data-bn="হোম" data-en="Home">হোম</button>
+  <button class="tab" onclick="show('customers',this)" data-bn="গ্রাহক" data-en="Customers">গ্রাহক</button>
+  <button class="tab" onclick="show('messages',this)" data-bn="মেসেজ" data-en="Messages">মেসেজ</button>
+  <button class="tab" onclick="show('reports',this)" data-bn="রিপোর্ট" data-en="Reports">রিপোর্ট</button>
+ </div>
+
+ <section class="panel" id="home">
+  <h3 data-bn="AKBOR SMS-এ স্বাগতম" data-en="Welcome to AKBOR SMS">AKBOR SMS-এ স্বাগতম</h3>
+  <p data-bn="আপনার SMS ব্যবসা পরিচালনার প্ল্যাটফর্ম।" data-en="Your business SMS management platform.">আপনার SMS ব্যবসা পরিচালনার প্ল্যাটফর্ম।</p>
+ </section>
+
+ <section class="panel" id="customers" hidden>
+  <h3 data-bn="গ্রাহক পরিচালনা" data-en="Customer Management">গ্রাহক পরিচালনা</h3>
+  <p>ডেটাবেস যুক্ত হলে গ্রাহকের তথ্য এখানে দেখা যাবে।</p>
+ </section>
+
+ <section class="panel" id="messages" hidden>
+  <h3 data-bn="SMS নোটিফিকেশন" data-en="SMS Notifications">SMS নোটিফিকেশন</h3>
+  <p>নিরাপদ সার্ভার ও অনুমোদিত SMS প্রদানকারী যুক্ত করার পর এই সুবিধা চালু হবে।</p>
+  <button disabled>SMS পাঠানো এখনো চালু হয়নি</button>
+ </section>
+
+ <section class="panel" id="reports" hidden>
+  <h3 data-bn="ব্যবসার রিপোর্ট" data-en="Business Reports">ব্যবসার রিপোর্ট</h3>
+  <p>SMS ইতিহাস, খরচ ও গ্রাহকের রিপোর্ট এখানে থাকবে।</p>
+ </section>
+
+ <div class="notice">
+  <b>নোট:</b> এটি প্রথম ওয়েবসাইট সংস্করণ। বাস্তব SMS, গ্রাহকের তথ্য ও লগইনের জন্য পরবর্তী ধাপে নিরাপদ সার্ভার ও ডেটাবেস লাগবে।
+ </div>
+</main>
+<footer>© 2026 AKBOR SMS</footer>
+<script>
+let language="bn";
+function changeLang(){
+ language=language==="bn"?"en":"bn";
+ document.documentElement.lang=language;
+ document.querySelectorAll("[data-bn]").forEach(el=>{
+  el.textContent=el.getAttribute("data-"+language);
+ });
+ document.getElementById("lang").textContent=language==="bn"?"English":"বাংলা";
+}
+function show(id,btn){
+ document.querySelectorAll("main section").forEach(el=>el.hidden=true);
+ document.getElementById(id).hidden=false;
+ document.querySelectorAll(".tab").forEach(el=>el.classList.remove("active"));
+ btn.classList.add("active");
+}
+</script>
+</body>
+</html>
+
